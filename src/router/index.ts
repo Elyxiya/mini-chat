@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/store/module/useUserStore'
+import ws from '@/utils/ws'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -21,7 +22,7 @@ router.beforeEach((to, from, next) => {
   let user = window.localStorage.getItem('user')
   const userStore = useUserStore()
   if (token) {
-
+    ws.connect(token)
     userStore.setToken(token)
     userStore.setUser(JSON.parse(user as string))
   }

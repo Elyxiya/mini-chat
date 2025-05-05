@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="shape-container">
-      <div class="page">
+      <div class="page" :data-theme="themeStore.theme">
         <router-view></router-view>
       </div>
     </div>
@@ -9,7 +9,9 @@
 </template>
 
 <script setup lang="ts">
+import { useThemeStore } from '@/store/module/useThemeStore'
 
+const themeStore = useThemeStore()
 </script>
 
 <style scoped lang="scss">
