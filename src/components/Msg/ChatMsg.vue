@@ -3,9 +3,9 @@
     <template> </template>
     <time-msg v-if="props.msg.isShowTime" :content="props.msg.createTime" />
     
-    <div v-else class="msg-box-wrapper" :class="{ right: right }">
+    <div class="msg-box-wrapper" :class="{ right: right }">
       <chat-avatar
-        :info="msgStore.userListMap.get(props.msg.fromId)"
+        :info="userStore.userMap.get(props.msg.fromId)"
         size="40px"
         class="chat-avatar"
       />
@@ -13,7 +13,7 @@
         <!--用户信息-->
         <div class="mgs-box-user-info" :class="{ right: right }">
           <div class="msg-username">
-            {{ msgStore.userListMap.get(props.msg.fromId).name }}
+            {{ userStore.userMap.get(props.msg.fromId).name }}
           </div>
           <div class="mgs-ip">
             [成员]
@@ -32,12 +32,11 @@
 import ChatMsgContent from '@/components/Msg/ChatMsgContent.vue'
 import ChatAvatar from '@/components/ChatAvatar.vue'
 import TimeMsg from '@/components/Msg/MsgContent/TimeMsg.vue'
+import { useUserStore } from '@/store/module/useUserStore'
 
-import { useUserInfoStore } from '@/store/useUserInfoStore'
-import { useChatMsgStore } from '@/store/useChatMsgStore'
 
-const userInfoStore = useUserInfoStore()
-const msgStore = useChatMsgStore()
+const userStore = useUserStore()
+
 
 const props = defineProps({
   msg: Object,
@@ -45,10 +44,10 @@ const props = defineProps({
 })
 
 
-const right = props.msg.fromId === userInfoStore.userId
+const right = props.msg.fromId === userStore.user.userId
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .msg-box {
   display: flex;
   margin-bottom: 20px;

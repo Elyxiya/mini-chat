@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --open",
+    "dev": "vite --open --port 4040",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint src",
@@ -17,12 +17,15 @@
     "preinstall": "node ./scripts/preinstall.js"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "@vueuse/core": "^13.1.0",
     "axios": "^1.9.0",
     "element-plus": "^2.9.9",
+    "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",
     "pinia": "^3.0.2",
     "pinia-plugin-persistedstate": "^4.2.0",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.1"
   },
@@ -30,6 +33,7 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.22.0",
+    "@types/lodash-es": "^4.17.12",
     "@typescript-eslint/eslint-plugin": "^8.27.0",
     "@typescript-eslint/parser": "^8.27.0",
     "@vitejs/plugin-vue": "^5.2.1",

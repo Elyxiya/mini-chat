@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/store/module/useUserStore'
+import { useChatListStore } from '@/store/module/useChatListStore'
 import ws from '@/utils/ws'
+import { GET_TOKEN,GET_USER } from '@/utils/token'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -17,14 +19,21 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from, next) => {
-  let token = window.localStorage.getItem('x-token')
-  let user = window.localStorage.getItem('user')
+router.beforeEach(async(to, from, next) => {
+  let token = GET_TOKEN()
+  let user = GET_USER()
   const userStore = useUserStore()
+  const chatListStore = useChatListStore()
   if (token) {
     ws.connect(token)
     userStore.setToken(token)
     userStore.setUser(JSON.parse(user as string))
+    await Promise.all([
+      userStore.getUserMap(),
+      chatListStore.setGroup(),
+      chatListStore.setPrivate()
+    ]);
+    chatListStore.setCurrentChat(chatListStore.groupList)
   }
   if (!token && to.path !== '/login') {
     next({ path: '/login' })

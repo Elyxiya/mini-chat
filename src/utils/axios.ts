@@ -2,13 +2,15 @@ import axios, { type InternalAxiosRequestConfig, type AxiosResponse, AxiosHeader
 import { useGlobalStore } from '@/store/module/useGlobalStore';
 import router from '@/router';
 import { ElMessage } from 'element-plus';
+import {  SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from './token';
+
 const SERVICE_URL = import.meta.env.VITE_HTTP_URL;
 export { SERVICE_URL };
 
 // 请求拦截器
 axios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   config.headers = config.headers || new AxiosHeaders();
-  config.headers.set('x-token', localStorage.getItem('x-token'));
+  config.headers.set('x-token', GET_TOKEN());
   return config;
 });
 
@@ -19,16 +21,17 @@ axios.interceptors.response.use(
     if (response.data.code === 401) {
       globalStore.setGlobalDialog(true, '认证失效', '您的登录过期，请重新登录');
       ElMessage.error('认证失效，请重新登录');
-      localStorage.removeItem('x-token');
+      REMOVE_TOKEN();
       router.push('/login');
     }
     if (response.data.code === 403) {
       globalStore.setGlobalDialog(true, '请求失败', '您的账号已在其它地方登录，请重新登录');
       ElMessage.error('您的账号已在其它地方登录，请重新登录');
-      localStorage.removeItem('x-token');
+      REMOVE_TOKEN();
       router.push('/login');
     }
     return Promise.resolve(response);
+    
   },
   (error) => {
     if (error.response && error.response.data) {

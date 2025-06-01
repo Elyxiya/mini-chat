@@ -2,7 +2,7 @@
   <div class="chat-container">
     <div class="chat-bg">
       <div class="chat-box">
-
+      <!--左边列表框-->
         <div class="box-left">
           <div class="chat-list-title">
             消息列表
@@ -12,43 +12,65 @@
             群聊
           </div>
           <div class="chat-list-item">
-
+              <ChatListItem 
+                :id = chatListStore.groupList.id
+                :targetId = chatListStore.groupList.targetId
+                :name="chatListStore.groupList.targetInfo.name" 
+                :avatar="chatListStore.groupList.targetInfo.avatar"
+                :lastname="chatListStore.groupList.lastMessage.fromInfo.name"
+                :message="chatListStore.groupList.lastMessage.message"
+                type="group"
+              />
           </div>
 
           <div class="middle-title">
             私聊
           </div>
           <div class="chat-list-item">
-
+            <ChatListItem v-for="item in chatListStore.privateList"
+                :id = item.id
+                :targetId = item.targetId
+                :name="item.targetInfo.name" 
+                :avatar="item.targetInfo.avatar"
+                :lastname="item.lastMessage?.fromInfo?.name||''"
+                :message="item.lastMessage?.message||''"
+                :type=" item.type"
+              />
           </div>
 
         </div>
-
+      <!--中间聊天框-->
         <div class="box-middle">
           <div class="middle-top">
-            <template v-if="targetId === '1'">
-              {{ groupChat?.targetInfo.name }}（{{ msgStore.userListMap.size }}）
-            </template>
-            <template v-else>
-              {{ currentSelectTarget?.targetInfo?.name }}
-            </template>
+            <TopTitle/>
           </div>
           <div class="middle-content">
             <div class="chat-show-area">
-
+              <chat-show />
             </div>
             <div class="chat-input-area">
 
             </div>
           </div>
         </div>
-
+      <!--右边列表框-->
         <div class="box-right">
           <div class="right-top">
-
+              <RightTop/>
           </div>
           <div class="right-content">
-
+            <div class="top">
+              <div class="title">在线人数 （2）</div>
+            </div>
+            <div class="user-list-area">
+              <UserListItem 
+                v-for="item in userStore.userMap" 
+                :key="item.id" 
+                :name="item.name" 
+                :avatar="item.avatar"
+                :id="item.id"
+              />
+            </div>
           </div>
         </div>
 
@@ -57,6 +79,15 @@
   </div>
 </template>
 <script setup lang="ts">
+import ChatListItem from './components/Left/ChatListItem.vue';
+import RightTop from './components/Right/RightTop.vue';
+import ChatShow from './components/Middle/ChatShow.vue';
+import UserListItem from './components/Right/UserListItem.vue';
+import TopTitle from './components/Middle/TopTitle.vue';
+import { useUserStore } from '@/store/module/useUserStore';
+import { useChatListStore } from '@/store/module/useChatListStore';
+const userStore = useUserStore();
+const chatListStore = useChatListStore();
 
 </script>
 
@@ -165,15 +196,15 @@
 
   .chat-list-item {
     display: flex;
+    flex-direction:column;
     align-items: center;
     margin-bottom: 5px;
-    padding: 10px;
-    height: 60px;
+    
     
     border-radius: 5px;
     cursor: pointer;
     user-select: none;
-
+  
     .chat-item-content {
       display: flex;
       flex-direction: column;
@@ -352,6 +383,9 @@
     background-color: rgba(var(--background-color), 0.5);
     backdrop-filter: blur(8px);
     user-select: none;
+    overflow: hidden;
+
+    
   }
 
   .right-content {
@@ -365,6 +399,25 @@
     backdrop-filter: blur(8px);
     border-radius: 5px;
     border: rgba(var(--background-color), 0.5) 3px solid;
+    
+    .top {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      height: 35px;
+      color: rgb(var(--text-color));
+      .title {
+        font-size: 16px;
+        font-weight: 700;
+      }
+    }
+
+    .user-list-area {
+      width: 100%;
+      padding: 5px 7px 7px 0;
+      
+    }
   }
 
 }

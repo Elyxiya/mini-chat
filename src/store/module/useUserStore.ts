@@ -4,12 +4,13 @@ import { listMap } from '@/api/user'
 import type { UserMapResponse, UserMap } from '@/types/user'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
+import ws from '@/utils/ws'
 export const useUserStore = defineStore('user', {
     state: () => ({
         user: null as UserInfo | null,
         token: '',
         chatList: [] as any[],
-        userMap: {} as UserMap,
+        userMap: [] as UserMap,
     }),
     actions: {
         setUser(user: UserInfo) {
@@ -21,7 +22,7 @@ export const useUserStore = defineStore('user', {
         async logout() {
             this.user = null
             this.token = ''
-            // ws.disConnect()
+            ws.disConnect()
             ElMessage.success('退出成功')
             router.push('/login')
             localStorage.removeItem('user')

@@ -15,7 +15,8 @@ export interface UserMapItem {
 
 // 用户映射表
 export interface UserMap {
-    [key: string]: UserMapItem
+     [key: string]: UserMapItem
+
 }
 
 // 用户列表响应
